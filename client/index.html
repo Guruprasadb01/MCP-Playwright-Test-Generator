@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MCP Test Generator</title>
+</head>
+<body>
+  <h2>Playwright Test Generator</h2>
+  <form id="promptForm">
+    <label>Prompt:<br><textarea name="prompt" rows="5" cols="60"></textarea></label><br>
+    <label>File Name: <input type="text" name="fileName" value="sample.spec.js"/></label><br>
+    <label>Framework:
+      <select name="framework">
+        <option value="">None</option>
+        <option value="react">React</option>
+        <option value="vue">Vue</option>
+        <option value="angular">Angular</option>
+      </select>
+    </label><br>
+    <label><input type="checkbox" name="run" /> Run Test</label><br>
+    <label><input type="checkbox" name="openInEditor" /> Open in VS Code</label><br>
+    <button type="submit">Generate Test</button>
+  </form>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("promptForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        prompt: form.prompt.value,
+        fileName: form.fileName.value,
+        framework: form.framework.value || undefined,
+        run: form.run.checked,
+        openInEditor: form.openInEditor.checked
+      };
+
+      const res = await fetch("http://localhost:3000/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      document.getElementById("output").textContent = JSON.stringify(result, null, 2);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Playwright MCP Server",
+    "description": "API to generate and run Playwright test cases from prompts"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/api/generate": {
+      "post": {
+        "summary": "Generate test",
+        "description": "Generate Playwright test code from prompt",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "prompt": { "type": "string" },
+              "fileName": { "type": "string" },
+              "framework": { "type": "string", "enum": ["react", "vue", "angular"] },
+              "run": { "type": "boolean" },
+              "openInEditor": { "type": "boolean" }
+            },
+            "required": ["prompt"]
+          }
+        }],
+        "responses": { "200": { "description": "Generated test code" } }
+      }
+    },
+    "/api/tests": {
+      "get": {
+        "summary": "List tests",
+        "description": "List all test files",
+        "responses": { "200": { "description": "List of files" } }
+      }
+    },
+    "/api/tests/{fileName}": {
+      "get": {
+        "summary": "Get test file",
+        "parameters": [{
+          "in": "path",
+          "name": "fileName",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": { "200": { "description": "File content" } }
+      }
+    }
+  }
+}
